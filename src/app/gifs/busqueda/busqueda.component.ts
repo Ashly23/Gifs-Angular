@@ -1,4 +1,6 @@
+import { ThisReceiver } from '@angular/compiler';
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { GifsService } from '../services/gifs.service';
 
 @Component({
   selector: 'app-busqueda',
@@ -8,11 +10,22 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 })
 export class BusquedaComponent {
 
-  @ViewChild('txtBuscar') txtBuscar!:ElementRef;
+  @ViewChild('txtBuscar') txtBuscar!:ElementRef<HTMLInputElement>;
 
-  buscar( termino: string )  {
+  constructor ( private gifsService: GifsService ) {}
+
+  buscar()  {
      
-    console.log(this.txtBuscar);
+    const valor = this.txtBuscar.nativeElement.value;
+
+    //no permite que se graben vacios
+    if ( valor.trim().length === 0) {
+       return;
+    }
+
+    this.gifsService.buscarGifs( valor);
+
+    this.txtBuscar.nativeElement.value = '';
   }
 
 }
